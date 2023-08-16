@@ -1,17 +1,24 @@
 import express from "express";
-import Email from "../model/email.js";
+
+import {
+  deleteEmails,
+  getEmails,
+  moveEmailsToBin,
+  saveSentEmails,
+  toogleStarredEmails,
+} from "../controllers/email-controllers.js";
 
 const routes = express.Router();
 
-routes.post("/save", (req, res) => {
-  try {
-    const newemail = Email(req.body);
-    newemail.save();
+routes.post("/save", saveSentEmails);
 
-    res.status(201).send("Email saved successfully");
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
+routes.get("/emails/:type", getEmails);
 
+routes.post("/save-draft", saveSentEmails);
+
+routes.post("/bin", moveEmailsToBin);
+
+routes.post("/starred", toogleStarredEmails);
+
+routes.delete("/delete", deleteEmails);
 export default routes;
